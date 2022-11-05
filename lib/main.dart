@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:xdg_icons/xdg_icons.dart';
 import 'package:yaru_widgets/yaru_widgets.dart';
 import 'package:yaru/yaru.dart';
 import 'package:yaru_icons/yaru_icons.dart';
@@ -90,6 +91,11 @@ class PathGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const fallBack = XdgIcon(
+      name: 'image-x-generic',
+      theme: 'Yaru',
+      size: 60,
+    );
     return FutureBuilder<List<FileSystemEntity>>(
       future: getFiles(path: path),
       builder: ((context, snapshot) => snapshot.hasData
@@ -120,20 +126,44 @@ class PathGrid extends StatelessWidget {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(
-                              e.path.endsWith('.png') ||
-                                      e.path.endsWith('.jpg') ||
-                                      e.path.endsWith('.webp') ||
-                                      e.path.endsWith('.jpeg')
-                                  ? YaruIcons.image_filled
-                                  : e.path.endsWith('.mp3')
-                                      ? YaruIcons.audio
-                                      : isDir(e)
-                                          ? YaruIcons.folder
-                                          : YaruIcons.document,
-                              size: 70,
-                              color: yaruLight.colorScheme.primary,
-                            ),
+                            e.path.endsWith('.png') ||
+                                    e.path.endsWith('.jpg') ||
+                                    e.path.endsWith('.webp') ||
+                                    e.path.endsWith('.jpeg')
+                                ? Image.file(
+                                    File(e.path),
+                                    height: 60,
+                                    fit: BoxFit.fitHeight,
+                                    filterQuality: FilterQuality.medium,
+                                    frameBuilder: (
+                                      context,
+                                      child,
+                                      frame,
+                                      wasSynchronouslyLoaded,
+                                    ) {
+                                      return frame == null ? fallBack : child;
+                                    },
+                                    errorBuilder:
+                                        (context, error, stackTrace) =>
+                                            fallBack,
+                                  )
+                                : e.path.endsWith('.mp3')
+                                    ? const XdgIcon(
+                                        name: 'audio-x-mpeg',
+                                        theme: 'Yaru',
+                                        size: 64,
+                                      )
+                                    : isDir(e)
+                                        ? const XdgIcon(
+                                            name: 'folder',
+                                            theme: 'Yaru',
+                                            size: 64,
+                                          )
+                                        : const XdgIcon(
+                                            name: 'text-x-generic',
+                                            theme: 'Yaru',
+                                            size: 64,
+                                          ),
                             Text(
                               e.path.replaceAll(path, '').replaceAll('/', ''),
                               overflow: TextOverflow.ellipsis,
