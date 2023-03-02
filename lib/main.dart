@@ -17,7 +17,8 @@ const favPathMap = <String, String>{
   'Music': '$home/Musik/'
 };
 
-void main() {
+Future<void> main() async {
+  await YaruWindowTitleBar.ensureInitialized();
   runApp(const FilesApp());
 }
 
@@ -47,22 +48,15 @@ class _App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return YaruMasterDetailPage(
-      appBar: AppBar(
-        title: const Text('Files'),
+      appBar: const YaruWindowTitleBar(
+        title: Text('Files'),
       ),
       pageBuilder: (context, index) {
         final favEntry = favPathMap.entries.elementAt(index);
 
-        return Navigator(
-          pages: [
-            MaterialPage(
-              child: PathPage(
-                path: favEntry.value,
-                includeBackButton: false,
-              ),
-            )
-          ],
-          onPopPage: (route, result) => route.didPop(result),
+        return PathPage(
+          path: favEntry.value,
+          includeBackButton: false,
         );
       },
       tileBuilder: (context, index, selected) {
@@ -75,7 +69,6 @@ class _App extends StatelessWidget {
           ),
         );
       },
-      leftPaneWidth: 200,
       length: favPathMap.length,
     );
   }
@@ -196,9 +189,13 @@ class PathPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: includeBackButton ? const YaruBackButton() : null,
+    return YaruDetailPage(
+      appBar: YaruWindowTitleBar(
+        leading: includeBackButton
+            ? const YaruBackButton(
+                style: YaruBackButtonStyle.rounded,
+              )
+            : null,
         title: Text(path),
       ),
       body: PathGrid(
@@ -213,7 +210,7 @@ Future<List<FileSystemEntity>> getFiles({required String path}) async {
 }
 
 bool isDir(FileSystemEntity e) {
-  return FileSystemEntity.typeSync(e.path) != FileSystemEntityType.notFound;
+  return Directory(e.path).existsSync();
 }
 
 class PageItem {
