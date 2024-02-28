@@ -13,12 +13,12 @@ dependencies:
     sdk: flutter
   handy_window: ^0.3.1
   xdg_icons: ^0.0.1
-  yaru: ^0.5.6
-  yaru_icons: ^1.0.3
-  yaru_widgets: ^2.1.1
+  yaru: ^1.2.2
+  yaru_icons: ^2.4.0
+  yaru_widgets: ^3.6.0
 
 dev_dependencies:
-  flutter_lints: ^2.0.0
+  flutter_lints: ^3.0.1
   flutter_test:
     sdk: flutter
 

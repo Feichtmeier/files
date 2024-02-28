@@ -14,7 +14,7 @@ const favPathMap = <String, String>{
   'Home': home,
   'Pictures': '$home/Bilder/',
   'Documents': '$home/Dokumente/',
-  'Music': '$home/Musik/'
+  'Music': '$home/Musik/',
 };
 
 Future<void> main() async {
@@ -23,7 +23,7 @@ Future<void> main() async {
 }
 
 class FilesApp extends StatelessWidget {
-  const FilesApp({Key? key}) : super(key: key);
+  const FilesApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -41,9 +41,7 @@ class FilesApp extends StatelessWidget {
 }
 
 class _App extends StatelessWidget {
-  const _App({
-    Key? key,
-  }) : super(key: key);
+  const _App();
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +57,7 @@ class _App extends StatelessWidget {
           includeBackButton: false,
         );
       },
-      tileBuilder: (context, index, selected) {
+      tileBuilder: (context, index, selected, availableWidth) {
         var e = favPathMap.entries.elementAt(index);
         return Tooltip(
           message: e.value,
@@ -76,9 +74,9 @@ class _App extends StatelessWidget {
 
 class PathGrid extends StatelessWidget {
   const PathGrid({
-    Key? key,
+    super.key,
     required this.path,
-  }) : super(key: key);
+  });
 
   final String path;
 
@@ -179,10 +177,10 @@ class PathGrid extends StatelessWidget {
 
 class PathPage extends StatelessWidget {
   const PathPage({
-    Key? key,
+    super.key,
     required this.path,
     this.includeBackButton = true,
-  }) : super(key: key);
+  });
 
   final String path;
   final bool includeBackButton;
